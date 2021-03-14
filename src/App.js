@@ -1,4 +1,6 @@
 import './App.css';
+import 'fontsource-roboto';
+
 import { Container } from "@material-ui/core";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import BoardsListPage from './components/boards/list';
