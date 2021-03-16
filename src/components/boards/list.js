@@ -1,4 +1,10 @@
-import { Button, Divider, Link, List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import {
+    Button,
+    List,
+    ListItem,
+    ListItemText,
+    Typography
+} from "@material-ui/core";
 import { useEffect, useState, forwardRef } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
@@ -25,20 +31,26 @@ const BoardsListItem = (props) => {
 
 const BoardsListLoader = (props) => {
     const [boards, setBoards] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`)
             .then(res => {
                 setBoards(res.data);
+                setLoaded(true);
             })
             .catch((err) => {
                 console.error(err);
             })
     }, [props.offset, props.limit]);
 
-    return <List>
-        {boards.map(board => <BoardsListItem data={board} />)}
-    </List>
+    if (loaded) {
+        return <List>
+            {boards.map(board => <BoardsListItem data={board} />)}
+        </List>
+    } else {
+        return "Loading";
+    }
 }
 
 const BoardsListPage = (props) => {

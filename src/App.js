@@ -4,6 +4,7 @@ import 'fontsource-roboto';
 import { Container } from "@material-ui/core";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import BoardsListPage from './components/boards/list';
+import BoardPage from './components/boards/detail';
 
 function App() {
   return <BrowserRouter>
@@ -12,9 +13,9 @@ function App() {
         <Route exact path="/boards">
           <BoardsListPage />
         </Route>
-        {/* <Route exact path="/boards/:board">
+        <Route path="/boards/:key">
           <BoardPage />
-        </Route> */}
+        </Route>
       </Switch>
     </Container>
   </BrowserRouter>
