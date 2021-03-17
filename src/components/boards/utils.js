@@ -1,18 +1,14 @@
 class TreeNode {
     constructor(task) {
-        this.task_id = task._id;
         this.task = task;
         this.subtasks = [];
     }
 }
 
 const getRoots = (tasks) => {
-    const allParents = new Set(tasks.map((task) => task._id));
-    const allChildren = new Set(tasks.reduce((acc, task) => {
-        return task.subtasks.size !== 0 ? acc.concat(task.subtasks) : acc;
-    }, []));
-
-    return [...allParents].filter(x => !allChildren.has(x));
+    return tasks
+        .filter(task => !task.hasOwnProperty("parent"))
+        .map(task => task._id);
 }
 
 export const createTree = (tasks) => {
@@ -20,7 +16,7 @@ export const createTree = (tasks) => {
     const map = new Map();
     tasks.forEach(task => map.set(task._id, task));
 
-    const createTree_ = (task) => {
+    const addSubtasks = (task) => {
         const root = new TreeNode(task);
         const subtasks = map.get(task._id).subtasks;
 
@@ -28,16 +24,12 @@ export const createTree = (tasks) => {
             return root;
         } else {
             root.subtasks = subtasks.map(subtask => {
-                return createTree_(map.get(subtask));
+                return addSubtasks(map.get(subtask));
             });
         }
 
         return root;
     }
 
-    const treeRoots = [];
-    for (const root of roots) {
-        treeRoots.push(createTree_(map.get(root)));
-    }
-    return treeRoots;
+    return roots.map(root => addSubtasks(map.get(root)));
 }
