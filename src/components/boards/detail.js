@@ -44,7 +44,6 @@ const BoardPage = (props) => {
         trees: [],
 
     });
-    const [trees, setTrees] = useState({});
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
