@@ -59,7 +59,7 @@ const BoardPage = (props) => {
                 console.log("err")
                 console.error(err);
             })
-    }, [setLoaded]);
+    }, []);
 
     if (loaded) {
         return <>
