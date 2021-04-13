@@ -41,7 +41,7 @@ const Task = (props) => {
 
 const BoardLoader = (props) => {
     const queryClient = useQueryClient();
-    const query = useQuery('board', async () => {
+    const query = useQuery(['board', props.key_], async () => {
         const res = await axios.get(API_URL + `/board/${props.key_}`);
         return {
             data: res.data,
