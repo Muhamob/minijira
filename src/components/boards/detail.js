@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
 import {
@@ -11,7 +10,7 @@ import {
     CardContent
 } from "@material-ui/core";
 import { createTree } from "./utils";
-import { QueryClient, useQueryClient, useQuery, QueryClientProvider } from 'react-query';
+import { QueryClient, useQuery, QueryClientProvider } from 'react-query';
 
 const queryClient = new QueryClient();
 
@@ -40,7 +39,6 @@ const Task = (props) => {
 }
 
 const BoardLoader = (props) => {
-    const queryClient = useQueryClient();
     const query = useQuery(['board', props.key_], async () => {
         const res = await axios.get(API_URL + `/board/${props.key_}`);
         return {

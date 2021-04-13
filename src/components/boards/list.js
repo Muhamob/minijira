@@ -6,11 +6,11 @@ import {
     ListItemText,
     Typography
 } from "@material-ui/core";
-import { useEffect, useState, forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
 import { Link as RouterLink } from 'react-router-dom';
-import { QueryClient, useQueryClient, useQuery, QueryClientProvider} from 'react-query';
+import { QueryClient, useQuery, QueryClientProvider} from 'react-query';
 
 const queryClient = new QueryClient();
 
@@ -34,8 +34,7 @@ const BoardsListItem = (props) => {
 }
 
 const BoardsListLoader = (props) => {
-    const queryClient = useQueryClient();
-    const query = useQuery('boardList', () => axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`))
+    const query = useQuery(['boardList', props.limit, props.offset], () => axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`))
 
     if (query.data) {
         console.log(query.data);
