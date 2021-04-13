@@ -72,7 +72,8 @@ const BoardsListPage = (props) => {
             next
         </Button>
         <Button onClick={() => {
-            setOffset(offset - limit);
+            const nextOffset = offset - limit;
+            setOffset( (nextOffset < 0) ? 0 : offset - limit );
         }}>
             prev
         </Button>
