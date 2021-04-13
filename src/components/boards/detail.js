@@ -11,7 +11,9 @@ import {
     CardContent
 } from "@material-ui/core";
 import { createTree } from "./utils";
+import { QueryClient, useQueryClient, useQuery, QueryClientProvider } from 'react-query';
 
+const queryClient = new QueryClient();
 
 const Task = (props) => {
     // Object with all tasks
@@ -37,45 +39,52 @@ const Task = (props) => {
     </Box>
 }
 
-const BoardPage = (props) => {
-    const { key } = useParams();
-    const [data, setData] = useState({
-        data: [],
-        trees: [],
-
+const BoardLoader = (props) => {
+    const queryClient = useQueryClient();
+    const query = useQuery('board', async () => {
+        const res = await axios.get(API_URL + `/board/${props.key_}`);
+        return {
+            data: res.data,
+            trees: createTree(res.data.tasks),
+            res: res
+        }
     });
-    const [loaded, setLoaded] = useState(false);
 
-    useEffect(() => {
-        axios.get(API_URL + `/board/${key}`)
-            .then((res) => {
-                setData({
-                    data: res.data,
-                    trees: createTree(res.data.tasks)
-                });
-                setLoaded(true);
-            })
-            .catch((err) => {
-                console.log("err")
-                console.error(err);
-            })
-    }, []);
-
-    if (loaded) {
+    if (query.data) {
         return <>
             <Typography variant="h3">
-                {data.data.title}
+                {query.data.data.title}
             </Typography>
             <Typography variant="subtitle1">
-                owned by: {data.data.owner.name || null}
+                owned by: {query.data.data.owner.name || null}
             </Typography>
-            {data.trees.map(tree => {
-                return <Task tree={tree} />
-            })}
-        </>;
+            {
+                query.data.trees.map(tree => {
+                    return <Task tree={tree} />
+                })
+            }
+        </>
     } else {
-        return "Loading"
+        return <Typography variant="h3">
+            {(() => {
+                if (query.isLoading) {
+                    return "Loading"
+                } else if (query.isError) {
+                    return "Error"
+                } else {
+                    return "Something went wrong"
+                }
+            })()}
+        </Typography>
     }
+}
+
+const BoardPage = (props) => {
+    const { key } = useParams();
+    
+    return <QueryClientProvider client={queryClient}>
+        <BoardLoader key_={key} />
+    </QueryClientProvider>;
 }
 
 export default BoardPage;

@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     List,
     ListItem,
@@ -9,6 +10,9 @@ import { useEffect, useState, forwardRef } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
 import { Link as RouterLink } from 'react-router-dom';
+import { QueryClient, useQueryClient, useQuery, QueryClientProvider} from 'react-query';
+
+const queryClient = new QueryClient();
 
 const BoardsListItem = (props) => {
     const data = props.data;
@@ -30,26 +34,26 @@ const BoardsListItem = (props) => {
 }
 
 const BoardsListLoader = (props) => {
-    const [boards, setBoards] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const queryClient = useQueryClient();
+    const query = useQuery('boardList', () => axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`))
 
-    useEffect(() => {
-        axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`)
-            .then(res => {
-                setBoards(res.data);
-                setLoaded(true);
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-    }, [props.offset, props.limit]);
-
-    if (loaded) {
+    if (query.data) {
+        console.log(query.data);
         return <List>
-            {boards.map(board => <BoardsListItem data={board} />)}
+            {query.data.data.map(board => <BoardsListItem data={board} />)}
         </List>
+    } else if (query.isLoading) {
+        return <Box>
+            Loading
+        </Box>
+    } else if (query.isError) {
+        return <Box>
+            <span style={{color: 'red'}}>Error</span>
+        </Box>
     } else {
-        return "Loading";
+        return <Box>
+            Something went wrong
+        </Box>
     }
 }
 
@@ -57,7 +61,7 @@ const BoardsListPage = (props) => {
     const [offset, setOffset] = useState(0)
     const limit = props.limit || 5;
 
-    return <>
+    return <QueryClientProvider client={queryClient}>
         <Typography variant="h3">
             Boards
         </Typography>
@@ -72,7 +76,7 @@ const BoardsListPage = (props) => {
         }}>
             prev
         </Button>
-    </>
+    </QueryClientProvider>
 }
 
 export default BoardsListPage;
