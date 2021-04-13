@@ -1,25 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import 'fontsource-roboto';
+
+import { Container } from "@material-ui/core";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import BoardsListPage from './components/boards/list';
+import BoardPage from './components/boards/detail';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <BrowserRouter>
+    <Container maxWidth="md">
+      <Switch>
+        <Route exact path="/boards">
+          <BoardsListPage />
+        </Route>
+        <Route path="/boards/:key">
+          <BoardPage />
+        </Route>
+        <Route exact path="/">
+          <Redirect to="/boards" />
+        </Route>
+      </Switch>
+    </Container>
+  </BrowserRouter>
 }
 
 export default App;
