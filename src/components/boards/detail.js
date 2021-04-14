@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
 import {
@@ -11,7 +10,9 @@ import {
     CardContent
 } from "@material-ui/core";
 import { createTree } from "./utils";
+import { QueryClient, useQuery, QueryClientProvider } from 'react-query';
 
+const queryClient = new QueryClient();
 
 const Task = (props) => {
     // Object with all tasks
@@ -37,45 +38,50 @@ const Task = (props) => {
     </Box>
 }
 
+const BoardLoader = (props) => {
+    const query = useQuery(['board', props.key_], async () => {
+        const res = await axios.get(API_URL + `/board/${props.key_}`);
+        return {
+            data: res.data,
+            trees: createTree(res.data.tasks),
+            res: res
+        }
+    });
+
+    if (!query.data) {
+        return <Typography variant="h3">
+            {(() => {
+                if (query.isLoading) {
+                    return "Loading"
+                } else if (query.isError) {
+                    return "Error"
+                } else {
+                    return "Something went wrong"
+                }
+            })()}
+        </Typography>
+    }
+    return <>
+        <Typography variant="h3">
+            {query.data.data.title}
+        </Typography>
+        <Typography variant="subtitle1">
+            owned by: {query.data.data.owner.name || null}
+        </Typography>
+        {
+            query.data.trees.map(tree => {
+                return <Task tree={tree} />
+            })
+        }
+    </>
+}
+
 const BoardPage = (props) => {
     const { key } = useParams();
-    const [data, setData] = useState({
-        data: [],
-        trees: [],
 
-    });
-    const [loaded, setLoaded] = useState(false);
-
-    useEffect(() => {
-        axios.get(API_URL + `/board/${key}`)
-            .then((res) => {
-                setData({
-                    data: res.data,
-                    trees: createTree(res.data.tasks)
-                });
-                setLoaded(true);
-            })
-            .catch((err) => {
-                console.log("err")
-                console.error(err);
-            })
-    }, []);
-
-    if (loaded) {
-        return <>
-            <Typography variant="h3">
-                {data.data.title}
-            </Typography>
-            <Typography variant="subtitle1">
-                owned by: {data.data.owner.name || null}
-            </Typography>
-            {data.trees.map(tree => {
-                return <Task tree={tree} />
-            })}
-        </>;
-    } else {
-        return "Loading"
-    }
+    return <QueryClientProvider client={queryClient}>
+        <BoardLoader key_={key} />
+    </QueryClientProvider>;
 }
 
 export default BoardPage;
