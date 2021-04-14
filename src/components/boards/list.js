@@ -42,6 +42,7 @@ const BoardsListLoader = (props) => {
             {query.data.data.map(board => <BoardsListItem data={board} />)}
         </List>
     } else if (query.isLoading) {
+        console.log("loading boards list")
         return <Box>
             Loading
         </Box>
@@ -66,15 +67,14 @@ const BoardsListPage = (props) => {
         </Typography>
         <BoardsListLoader offset={offset} limit={limit} />
         <Button onClick={() => {
+            setOffset(Math.max(0, offset - limit))
+        }}>
+            prev
+        </Button>
+        <Button onClick={() => {
             setOffset(offset + limit);
         }}>
             next
-        </Button>
-        <Button onClick={() => {
-            const nextOffset = offset - limit;
-            setOffset( (nextOffset < 0) ? 0 : offset - limit );
-        }}>
-            prev
         </Button>
     </QueryClientProvider>
 }

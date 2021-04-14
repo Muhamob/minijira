@@ -48,21 +48,7 @@ const BoardLoader = (props) => {
         }
     });
 
-    if (query.data) {
-        return <>
-            <Typography variant="h3">
-                {query.data.data.title}
-            </Typography>
-            <Typography variant="subtitle1">
-                owned by: {query.data.data.owner.name || null}
-            </Typography>
-            {
-                query.data.trees.map(tree => {
-                    return <Task tree={tree} />
-                })
-            }
-        </>
-    } else {
+    if (!query.data) {
         return <Typography variant="h3">
             {(() => {
                 if (query.isLoading) {
@@ -75,11 +61,24 @@ const BoardLoader = (props) => {
             })()}
         </Typography>
     }
+    return <>
+        <Typography variant="h3">
+            {query.data.data.title}
+        </Typography>
+        <Typography variant="subtitle1">
+            owned by: {query.data.data.owner.name || null}
+        </Typography>
+        {
+            query.data.trees.map(tree => {
+                return <Task tree={tree} />
+            })
+        }
+    </>
 }
 
 const BoardPage = (props) => {
     const { key } = useParams();
-    
+
     return <QueryClientProvider client={queryClient}>
         <BoardLoader key_={key} />
     </QueryClientProvider>;
