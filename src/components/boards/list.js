@@ -1,14 +1,18 @@
 import {
+    Box,
     Button,
     List,
     ListItem,
     ListItemText,
     Typography
 } from "@material-ui/core";
-import { useEffect, useState, forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import axios from 'axios';
 import { API_URL } from "./constants";
 import { Link as RouterLink } from 'react-router-dom';
+import { QueryClient, useQuery, QueryClientProvider} from 'react-query';
+
+const queryClient = new QueryClient();
 
 const BoardsListItem = (props) => {
     const data = props.data;
@@ -30,26 +34,26 @@ const BoardsListItem = (props) => {
 }
 
 const BoardsListLoader = (props) => {
-    const [boards, setBoards] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const query = useQuery(['boardList', props.limit, props.offset], () => axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`))
 
-    useEffect(() => {
-        axios.get(API_URL + `/board?limit=${props.limit || 5}&offset=${props.offset}`)
-            .then(res => {
-                setBoards(res.data);
-                setLoaded(true);
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-    }, [props.offset, props.limit]);
-
-    if (loaded) {
+    if (query.data) {
+        console.log(query.data);
         return <List>
-            {boards.map(board => <BoardsListItem data={board} />)}
+            {query.data.data.map(board => <BoardsListItem data={board} />)}
         </List>
+    } else if (query.isLoading) {
+        console.log("loading boards list")
+        return <Box>
+            Loading
+        </Box>
+    } else if (query.isError) {
+        return <Box>
+            <span style={{color: 'red'}}>Error</span>
+        </Box>
     } else {
-        return "Loading";
+        return <Box>
+            Something went wrong
+        </Box>
     }
 }
 
@@ -57,22 +61,22 @@ const BoardsListPage = (props) => {
     const [offset, setOffset] = useState(0)
     const limit = props.limit || 5;
 
-    return <>
+    return <QueryClientProvider client={queryClient}>
         <Typography variant="h3">
             Boards
         </Typography>
         <BoardsListLoader offset={offset} limit={limit} />
         <Button onClick={() => {
+            setOffset(Math.max(0, offset - limit))
+        }}>
+            prev
+        </Button>
+        <Button onClick={() => {
             setOffset(offset + limit);
         }}>
             next
         </Button>
-        <Button onClick={() => {
-            setOffset(offset - limit);
-        }}>
-            prev
-        </Button>
-    </>
+    </QueryClientProvider>
 }
 
 export default BoardsListPage;
