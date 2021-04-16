@@ -1,7 +1,7 @@
-import RegisterForm from "../forms/register";
+import RegisterForm from '../forms/register'
 
 const RegisterPage = (props) => {
-    return <RegisterForm />
+  return <RegisterForm />
 }
 
-export default RegisterPage;
+export default RegisterPage

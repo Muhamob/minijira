@@ -1,7 +1,7 @@
-import AuthenticationForm from "../forms/auth";
+import AuthenticationForm from '../forms/auth'
 
 const AuthPage = (props) => {
-    return <AuthenticationForm />
+  return <AuthenticationForm />
 }
 
-export default AuthPage;
+export default AuthPage

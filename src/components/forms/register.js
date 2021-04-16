@@ -1,15 +1,14 @@
-import { Button, FormControl, FormGroup, Input, TextField } from "@material-ui/core";
-import { useState } from "react";
+import { Button, FormControl, FormGroup, Input, TextField } from '@material-ui/core'
 
 const RegisterForm = (props) => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(e);
-        const formData = new FormData(e.target);
-        console.log("Name:", formData.get("name"));
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(e)
+    const formData = new FormData(e.target)
+    console.log('Name:', formData.get('name'))
+  }
 
-    return <form onSubmit={handleSubmit}>
+  return <form onSubmit={handleSubmit}>
         <FormGroup>
             <FormControl>
                 <TextField id="username" label="username" />
@@ -25,4 +24,4 @@ const RegisterForm = (props) => {
     </form>
 }
 
-export default RegisterForm;
+export default RegisterForm

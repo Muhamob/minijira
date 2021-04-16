@@ -1,14 +1,14 @@
-import './App.css';
-import 'fontsource-roboto';
+import './App.css'
+import 'fontsource-roboto'
 
-import { Container } from "@material-ui/core";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import BoardsListPage from './components/boards/list';
-import BoardPage from './components/boards/detail';
-import RegisterPage from './components/pages/register';
-import AuthPage from './components/pages/auth';
+import { Container } from '@material-ui/core'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import BoardsListPage from './components/boards/list'
+import BoardPage from './components/boards/detail'
+import RegisterPage from './components/pages/register'
+import AuthPage from './components/pages/auth'
 
-function App() {
+function App () {
   return <BrowserRouter>
     <Container maxWidth="md">
       <Switch>
@@ -32,4 +32,4 @@ function App() {
   </BrowserRouter>
 }
 
-export default App;
+export default App
