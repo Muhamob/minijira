@@ -28,7 +28,7 @@ const Task = (props) => {
                     {tree.task.description}
                 </Typography>
                 <List>
-                    {tree.subtasks.map(subtask => <ListItem>
+                    {tree.subtasks.map(subtask => <ListItem key={subtask._id}>
                         <Task tree={subtask} />
                     </ListItem>
                     )}
@@ -70,7 +70,7 @@ const BoardLoader = (props) => {
         </Typography>
         {
             query.data.trees.map(tree => {
-              return <Task tree={tree} />
+              return <Task key={tree.task._id} tree={tree} />
             })
         }
     </>

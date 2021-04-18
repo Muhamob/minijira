@@ -18,19 +18,19 @@ const BoardsListItem = (props) => {
   const data = props.data
 
   const renderLink = forwardRef((itemProps, ref) => <RouterLink
-        to={`/boards/${data.key}`}
-        ref={ref}
-        {...itemProps}
-    />)
+    to={`/boards/${data.key}`}
+    ref={ref}
+    {...itemProps}
+  />)
 
   return <ListItem divider component={renderLink}>
-        <ListItemText
-            primary={`${data.category.key}::${data.category.value}`}
-            secondary={<Typography variant="body2">
-                {data.title}
-            </Typography>}
-        />
-    </ListItem>
+    <ListItemText
+      primary={`${data.category.key}::${data.category.value}`}
+      secondary={<Typography variant="body2">
+        {data.title}
+      </Typography>}
+    />
+  </ListItem>
 }
 
 const BoardsListLoader = (props) => {
@@ -39,20 +39,20 @@ const BoardsListLoader = (props) => {
   if (query.data) {
     console.log(query.data)
     return <List>
-            {query.data.data.map(board => <BoardsListItem data={board} />)}
-        </List>
+      {query.data.data.map(board => <BoardsListItem key={board._id} data={board} />)}
+    </List>
   } else if (query.isLoading) {
     console.log('loading boards list')
     return <Box>
-            Loading
+      Loading
         </Box>
   } else if (query.isError) {
     return <Box>
-            <span style={{ color: 'red' }}>Error</span>
-        </Box>
+      <span style={{ color: 'red' }}>Error</span>
+    </Box>
   } else {
     return <Box>
-            Something went wrong
+      Something went wrong
         </Box>
   }
 }
@@ -62,21 +62,21 @@ const BoardsListPage = (props) => {
   const limit = props.limit || 5
 
   return <QueryClientProvider client={queryClient}>
-        <Typography variant="h3">
-            Boards
+    <Typography variant="h3">
+      Boards
         </Typography>
-        <BoardsListLoader offset={offset} limit={limit} />
-        <Button onClick={() => {
-          setOffset(Math.max(0, offset - limit))
-        }}>
-            prev
+    <BoardsListLoader offset={offset} limit={limit} />
+    <Button onClick={() => {
+      setOffset(Math.max(0, offset - limit))
+    }}>
+      prev
         </Button>
-        <Button onClick={() => {
-          setOffset(offset + limit)
-        }}>
-            next
+    <Button onClick={() => {
+      setOffset(offset + limit)
+    }}>
+      next
         </Button>
-    </QueryClientProvider>
+  </QueryClientProvider>
 }
 
 export default BoardsListPage

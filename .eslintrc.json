@@ -12,11 +12,16 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module"
+        "sourceType": "module",
+        "indent": ["error", 4]
     },
     "plugins": [
         "react"
     ],
     "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "react/display-name": "off",
+        "no-prototype-builtins": "off"
     }
 }

@@ -1,4 +1,4 @@
-import { Button, FormControl, FormGroup, Input, TextField } from '@material-ui/core'
+import { Button, FormControl, FormGroup, TextField, Typography } from '@material-ui/core'
 
 const AuthenticationForm = (props) => {
   const handleSubmit = (e) => {
@@ -9,6 +9,9 @@ const AuthenticationForm = (props) => {
   }
 
   return <form onSubmit={handleSubmit}>
+        <Typography variant="h3">
+            Sign in
+        </Typography>
         <FormGroup>
             <FormControl>
                 <TextField id="username" label="username" />
