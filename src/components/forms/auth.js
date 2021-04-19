@@ -1,24 +1,42 @@
 import { Button, FormControl, FormGroup, TextField, Typography } from '@material-ui/core'
-import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { useFormData } from './hooks'
+import { setAccessToken } from '../../utils/auth'
+import { loginUserRequest } from '../../api/register'
 
 const AuthenticationForm = (props) => {
-  const [state, setState] = useState({})
   const history = useHistory()
+  const [state, handleChange] = useFormData()
+  const mutation = useMutation(state => loginUserRequest(state,
+    {
+      onSuccess: (data, variables, context) => {
+        setAccessToken(data.data.accessToken)
+      },
+      onError: (error, variables, context) => {
+        console.log(error)
+      }
+    }))
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('State:', state)
-
-    history.push('/boards')
+    console.log(state)
+    mutation.mutate(state)
   }
 
-  const handleChange = (e) => {
-    const { id, value } = e.target
-    setState(prevState => ({
-      ...prevState,
-      [id]: value
-    }))
+  if (mutation.isError) {
+    return <Typography variant="h3">
+              <span color="red">Error</span>
+          </Typography>
+  }
+
+  if (mutation.isLoading) {
+    return <Typography variant="h3">
+            <span color="yellow">Loading</span>
+        </Typography>
+  }
+  if (mutation.isSuccess) {
+    history.push('/boards')
   }
 
   return <form onSubmit={handleSubmit}>

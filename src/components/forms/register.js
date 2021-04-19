@@ -1,34 +1,22 @@
 import { Button, FormControl, FormGroup, TextField, Typography } from '@material-ui/core'
-import axios from 'axios'
-import { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
-import { API_URL } from '../boards/constants'
+import { setAccessToken } from '../../utils/auth'
+import { registerUserRequest } from '../../api/register'
+import { useFormData } from './hooks'
 
 const RegisterForm = (props) => {
-  const [state, setState] = useState({})
   const history = useHistory()
-  const mutation = useMutation(state => axios.post(API_URL + '/auth/register', state, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }),
-  {
-    onSuccess: (data, variables, context) => {
+  const [state, handleChange] = useFormData()
+  const mutation = useMutation(state => registerUserRequest(state,
+    {
+      onSuccess: (data, variables, context) => {
         setAccessToken(data.data.accessToken)
-    },
-    onError: (error, variables, context) => {
-      console.log(error)
-    }
-  })
-
-  const handleChange = (e) => {
-    const { id, value } = e.target
-    setState(prevState => ({
-      ...prevState,
-      [id]: value
+      },
+      onError: (error, variables, context) => {
+        console.log(error)
+      }
     }))
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
