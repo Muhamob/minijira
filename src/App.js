@@ -7,9 +7,12 @@ import BoardsListPage from './components/boards/list'
 import BoardPage from './components/boards/detail'
 import RegisterPage from './components/pages/register'
 import AuthPage from './components/pages/auth'
+import { NavBar } from './components/nav/header'
 
 function App () {
-  return <BrowserRouter>
+  return <>
+  <NavBar />
+  <BrowserRouter>
     <Container maxWidth="md">
       <Switch>
         <Route exact path="/boards">
@@ -30,6 +33,7 @@ function App () {
       </Switch>
     </Container>
   </BrowserRouter>
+  </>
 }
 
 export default App
