@@ -9,10 +9,19 @@ import Menu from '@material-ui/core/Menu'
 import { getAccessToken } from '../../utils/auth'
 import { Avatar } from '@material-ui/core'
 import { getUserProfile } from '../../api/user'
+import { useQuery } from 'react-query'
 
 const UserInfoPanelGroup = (props) => {
-  console.log('user profile', getUserProfile())
-  return <Avatar>A</Avatar>
+  const query = useQuery('userInfoPanelGroup', getUserProfile)
+
+  if (query.isLoading) {
+    return <Avatar>Loading</Avatar>
+  }
+  if (query.isError) {
+    return <Avatar>Error</Avatar>
+  }
+  console.log('user profile', query.data)
+  return <Avatar>{query.data.data.name}</Avatar>
 }
 
 export const NavBar = (props) => {

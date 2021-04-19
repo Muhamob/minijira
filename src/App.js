@@ -8,9 +8,12 @@ import BoardPage from './components/boards/detail'
 import RegisterPage from './components/pages/register'
 import AuthPage from './components/pages/auth'
 import { NavBar } from './components/nav/header'
+import { QueryClientProvider, QueryClient } from 'react-query'
+
+const queryClient = new QueryClient()
 
 function App () {
-  return <>
+  return <QueryClientProvider client={queryClient}>
   <NavBar />
   <BrowserRouter>
     <Container maxWidth="md">
@@ -33,7 +36,7 @@ function App () {
       </Switch>
     </Container>
   </BrowserRouter>
-  </>
+  </QueryClientProvider>
 }
 
 export default App

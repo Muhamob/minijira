@@ -1,22 +1,22 @@
 import { Button, FormControl, FormGroup, TextField, Typography } from '@material-ui/core'
 import { useMutation } from 'react-query'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import { setAccessToken } from '../../utils/auth'
 import { registerUserRequest } from '../../api/register'
 import { useFormData } from './hooks'
 
 const RegisterForm = (props) => {
-  const history = useHistory()
+  // const history = useHistory()
   const [state, handleChange] = useFormData()
-  const mutation = useMutation(state => registerUserRequest(state,
-    {
-      onSuccess: (data, variables, context) => {
-        setAccessToken(data.data.accessToken)
-      },
-      onError: (error, variables, context) => {
-        console.log(error)
-      }
-    }))
+  const mutation = useMutation(state => registerUserRequest(state), {
+    onSuccess: (data, variables, context) => {
+      console.log('Recieved token', data.data.accessToken)
+      setAccessToken(data.data.accessToken)
+    },
+    onError: (error, variables, context) => {
+      console.log(error)
+    }
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -35,9 +35,9 @@ const RegisterForm = (props) => {
         <span color="yellow">Loading</span>
     </Typography>
   }
-  if (mutation.isSuccess) {
-    history.push('/boards')
-  }
+  // if (mutation.isSuccess) {
+  // history.push('/boards')
+  // }
 
   return <form onSubmit={handleSubmit}>
         <Typography variant="h3">

@@ -8,15 +8,14 @@ import { loginUserRequest } from '../../api/register'
 const AuthenticationForm = (props) => {
   const history = useHistory()
   const [state, handleChange] = useFormData()
-  const mutation = useMutation(state => loginUserRequest(state,
-    {
-      onSuccess: (data, variables, context) => {
-        setAccessToken(data.data.accessToken)
-      },
-      onError: (error, variables, context) => {
-        console.log(error)
-      }
-    }))
+  const mutation = useMutation(state => loginUserRequest(state), {
+    onSuccess: (data, variables, context) => {
+      setAccessToken(data.data.accessToken)
+    },
+    onError: (error, variables, context) => {
+      console.log(error)
+    }
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -45,7 +44,7 @@ const AuthenticationForm = (props) => {
         </Typography>
         <FormGroup>
             <FormControl>
-                <TextField id="username" label="username" value={state?.username} onChange={handleChange}/>
+                <TextField id="email" label="email" value={state?.email} onChange={handleChange}/>
             </FormControl>
             <FormControl>
                 <TextField type='password' id="password" label="password" value={state?.password} onChange={handleChange}/>
