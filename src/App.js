@@ -14,8 +14,8 @@ const queryClient = new QueryClient()
 
 function App () {
   return <QueryClientProvider client={queryClient}>
-  <NavBar />
   <BrowserRouter>
+    <NavBar />
     <Container maxWidth="md">
       <Switch>
         <Route exact path="/boards">
