@@ -16,7 +16,14 @@ import { Link as RouterLink } from 'react-router-dom'
 // const context = createContext()
 
 const UserInfoPanelGroup = (props) => {
-  const query = useQuery('userInfoPanelGroup', getUserProfile)
+  const query = useQuery('userInfoPanelGroup', getUserProfile, {
+    retry: (count, e) => {
+      // TODO: add handling 401 Auth error
+      console.log('count', count)
+      console.log('error', e)
+      return false
+    }
+  })
 
   console.log('user profile', query.data)
   if (query.isSuccess) {
