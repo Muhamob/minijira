@@ -10,9 +10,7 @@ import { useState, forwardRef } from 'react'
 import axios from 'axios'
 import { API_URL } from './constants'
 import { Link as RouterLink } from 'react-router-dom'
-import { QueryClient, useQuery, QueryClientProvider } from 'react-query'
-
-const queryClient = new QueryClient()
+import { useQuery } from 'react-query'
 
 const BoardsListItem = (props) => {
   const data = props.data
@@ -61,7 +59,7 @@ const BoardsListPage = (props) => {
   const [offset, setOffset] = useState(0)
   const limit = props.limit || 5
 
-  return <QueryClientProvider client={queryClient}>
+  return <>
     <Typography variant="h3">
       Boards
         </Typography>
@@ -76,7 +74,7 @@ const BoardsListPage = (props) => {
     }}>
       next
         </Button>
-  </QueryClientProvider>
+  </>
 }
 
 export default BoardsListPage

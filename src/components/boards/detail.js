@@ -10,9 +10,7 @@ import {
   CardContent
 } from '@material-ui/core'
 import { createTree } from './utils'
-import { QueryClient, useQuery, QueryClientProvider } from 'react-query'
-
-const queryClient = new QueryClient()
+import { useQuery } from 'react-query'
 
 const Task = (props) => {
   // Object with all tasks
@@ -79,9 +77,9 @@ const BoardLoader = (props) => {
 const BoardPage = (props) => {
   const { key } = useParams()
 
-  return <QueryClientProvider client={queryClient}>
+  return <>
         <BoardLoader key_={key} />
-    </QueryClientProvider>
+    </>
 }
 
 export default BoardPage

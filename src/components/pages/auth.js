@@ -1,12 +1,9 @@
 import AuthenticationForm from '../forms/auth'
-import { QueryClientProvider, QueryClient } from 'react-query'
-
-const queryClient = new QueryClient()
 
 const AuthPage = (props) => {
-  return <QueryClientProvider client={queryClient}>
+  return <>
     <AuthenticationForm />
-  </QueryClientProvider>
+  </>
 }
 
 export default AuthPage
